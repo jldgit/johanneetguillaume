@@ -728,4 +728,31 @@
         }
     </script>
 </body>
+<script>
+    // On récupère toutes les questions de la FAQ
+    const questions = document.querySelectorAll('.faq-question');
+
+    questions.forEach(question => {
+        question.addEventListener('click', () => {
+            const item = question.parentElement;
+            const answer = question.nextElementSibling;
+
+            // On vérifie si le volet est déjà ouvert
+            const isOpen = item.classList.contains('active');
+
+            // 1. On ferme tous les autres volets (optionnel, pour un effet propre)
+            document.querySelectorAll('.faq-item').forEach(otherItem => {
+                otherItem.classList.remove('active');
+                otherItem.querySelector('.faq-answer').style.maxHeight = null;
+            });
+
+            // 2. Si le volet cliqué n'était pas ouvert, on l'ouvre
+            if (!isOpen) {
+                item.classList.add('active');
+                // scrollHeight calcule la hauteur réelle du contenu textuel
+                answer.style.maxHeight = answer.scrollHeight + "px";
+            }
+        });
+    });
+</script>
 </html>
