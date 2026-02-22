@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mariage à Pont-Aven | Élégance et Art</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- VARIABLES & BASE --- */
+        :root {
+            --blue-roi: #0F1E4E;
+            --blue-light: #488AC7;
+            --matisse-orange: #FFFFFF;
+            --white: #FFFFFF;
+            --off-white: #FAFAFA;
+            --text-dark: #2C2C2C;
+            --font-title: 'Playfair Display', serif;
+            --font-body: 'Lato', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        html { scroll-behavior: smooth; }
+        
+        body {
+            font-family: var(--font-body);
+            color: var(--text-dark);
+            background-color: var(--off-white);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3 { font-family: var(--font-title); color: var(--blue-roi); }
+        
+        /* --- NAVIGATION (HAMBURGER) --- */
+        .menu-btn {
+            position: fixed;
+            top: 25px;
+            left: 25px;
+            z-index: 1000;
+            cursor: pointer;
+            background: var(--white);
+            padding: 10px;
+            border-radius: 50%;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .bar {
+            width: 25px;
+            height: 3px;
+            background-color: var(--blue-roi);
+            margin: 4px 0;
+            transition: 0.4s;
+        }
+        
+        .nav-overlay {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 999;
+            top: 0;
+            left: 0;
+            background-color: var(--blue-roi);
+            overflow-x: hidden;
+            transition: 0.5s;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .nav-overlay a {
+            padding: 15px;
+            text-decoration: none;
+            font-size: 2rem;
+            color: var(--white);
+            font-family: var(--font-title);
+            display: block;
+            transition: 0.3s;
+            opacity: 0;
+        }
+        
+        .nav-overlay.open { width: 100%; }
+        .nav-overlay.open a { opacity: 1; }
+
+ /* --- MISE EN PAGE GLOBALE (C'est ce qui manquait !) --- */
+        section {
+            padding: 80px 10%; /* Redonne de l'espace à toutes les sections */
+            position: relative;
+            max-width: 1600px; /* Évite que ça s'étire trop sur écran géant */
+            margin: 0 auto;
+        }
+
+        .section-header { text-align: center; margin-bottom: 60px; }
+        .section-title { font-size: 3rem; margin-bottom: 10px; }
+        .section-intro { font-size: 1.1rem; color: #666; max-width: 700px; margin: 0 auto; }
+
+/* --- SECTION 1: ACCUEIL (Style plein écran récupéré) --- */
+        #accueil {
+            height: 100vh;
+            width: 100%;
+            padding: 0;
+            display: flex;
+            align-items: stretch; 
+            /* C'est ici qu'on met l'image en fond */
+            background-image: url('Screenshot_20251005_194840.jpg'); 
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed; /* Effet de profondeur */
+        }
+
+        .hero-info {
+            width: 35%; /* La largeur de la bande blanche */
+            min-width: 450px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 60px;
+            
+            /* L'effet de transparence blanc */
+            background-color: rgba(255, 255, 255, 0.92); 
+            backdrop-filter: blur(5px);
+            border-right: 3px solid var(--blue-roi);
+        }
+
+        .hero-info h1 {
+            font-size: 3.5rem;
+            line-height: 1.1;
+            margin-bottom: 25px;
+        }
+        
+        .hero-date {
+            font-size: 1.5rem;
+            font-weight: 300;
+            color: var(--text-dark);
+            margin-bottom: 40px;
+            letter-spacing: 2px;
+            border-bottom: 2px solid var(--matisse-orange);
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+
+        .hero-details {
+            border-top: 1px solid var(--blue-roi);
+            padding-top: 20px;
+        }
+        
+        /* On cache l'ancien bloc image s'il reste dans le HTML */
+        .hero-image {
+            display: none;
+        }
+        /* --- SECTIONS GÉNÉRALES --- */
+        section {
+            padding: 80px 10%; 
+            position: relative;
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: var(--blue-roi);
+            margin: 10px auto 0;
+        }
+
+        .section-intro {
+            font-family: var(--font-title);
+            font-style: italic;
+            font-size: 1.1rem;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* --- AGENDA --- */
+        .timeline {
+            max-width: 800px;
+            margin: 0 auto;
+            border-left: 2px solid var(--blue-roi);
+            padding-left: 30px;
+        }
+        .event {
+            margin-bottom: 40px;
+            position: relative;
+        }
+        .event::before {
+            content: '';
+            width: 16px;
+            height: 16px;
+            background: var(--blue-roi);
+            border-radius: 50%;
+            position: absolute;
+            left: -39px;
+            top: 5px;
+        }
+        .time { font-weight: bold; color: var(--blue-roi); margin-bottom: 5px; display: block;}
+
+        /* --- FAQ / ACCORDION --- */
+        .faq-item {
+            background: var(--white);
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-radius: 8px;
+            overflow: hidden;
+            border-left: 4px solid transparent;
+            transition: 0.3s;
+        }
+        .faq-item:hover { border-left-color: var(--matisse-orange); }
+
+        .faq-question {
+            padding: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            padding: 0 20px;
+            background-color: #f8f9fc;
+        }
+        
+        /* --- ACCES & TRANSPORTS --- */
+        .access-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start; /* Permet aux éléments de coller en haut */
+        }
+        
+        /* Suppression de .monet-img qui n'est plus utilisé */
+
+        .map-container iframe {
+            width: 100%;
+            height: 350px;
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px; /* Espace sous la carte avant le train */
+        }
+        .transport-option {
+            background: var(--white);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #eee;
+        }
+        .transport-option h4 { color: var(--blue-roi); margin-bottom: 10px; display: flex; align-items: center; gap: 10px;}
+        
+        .rental-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        .rental-btn {
+            font-size: 0.8rem;
+            padding: 5px 15px;
+            background-color: #eee;
+            color: var(--text-dark);
+            text-decoration: none;
+            border-radius: 4px;
+            transition: 0.3s;
+        }
+        .rental-btn:hover { background-color: var(--blue-light); color: white; }
+
+        /* --- CARDS GÉNÉRALES --- */
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        /* SPÉCIFIQUE POUR "PROFITER DU SÉJOUR" (3 par ligne) */
+        .grid-cards-3col {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .card {
+            background: var(--white);
+            padding: 20px;
+            text-align: center;
+            border: 1px solid #eee;
+            transition: transform 0.3s;
+            border-radius: 8px;
+        }
+        .card:hover { transform: translateY(-5px); border-color: var(--blue-roi); }
+        
+        /* Liens dans les cartes */
+        .card ul { list-style: none; margin-top: 15px; text-align: left; padding-left: 10px;}
+        .card li { margin-bottom: 8px; }
+        .card li a {
+            text-decoration: none;
+            color: var(--blue-roi);
+            font-size: 0.95rem;
+            transition: 0.3s;
+            border-bottom: 1px dotted transparent;
+        }
+        .card li a:hover { border-bottom-color: var(--matisse-orange); color: var(--blue-light);}
+
+        .btn-link {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: var(--blue-roi);
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 30px;
+            font-size: 0.9rem;
+        }
+
+        /* --- RETOUR --- */
+        .retour-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .retour-content {
+            text-align: left;
+        }
+        .retour-image {
+            width: 100%;
+            height: 400px;
+            border-radius: 10px;
+            background-image: url('IMG_20251004_152441.jpg'); 
+            background-size: cover;
+            background-position: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        /* --- RSVP FORM --- */
+        .rsvp-container {
+            text-align: center;
+            background: var(--white);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+
+/* --- MOBILE --- */
+        @media (max-width: 900px) {
+
+            section { padding: 60px 5%; }
+            .hero-info { width: 100%; min-width: 100%; padding: 80px 30px; background-color: rgba(255,255,255,0.95); border-right: none; text-align: center; }
+            .hero-info h1 { font-size: 3.5rem; }
+            .access-grid, .retour-grid, .grid-cards-3col { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+
+    <div class="menu-btn" onclick="toggleNav()">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+    </div>
+
+    <div id="myNav" class="nav-overlay">
+        <a href="javascript:void(0)" style="position: absolute; top: 20px; right: 45px; font-size: 60px;" onclick="toggleNav()">×</a>
+        <a href="#accueil" onclick="toggleNav()">Accueil</a>
+        <a href="#agenda" onclick="toggleNav()">Agenda</a>
+        <a href="#faq" onclick="toggleNav()">Questions et Réponses</a>
+        <a href="#acces" onclick="toggleNav()">Accès</a>
+        <a href="#logement" onclick="toggleNav()">Hébergements</a>
+        <a href="#retour" onclick="toggleNav()">Le Lendemain</a>
+        <a href="#guide" onclick="toggleNav()">Profiter du séjour</a>
+        <a href="#rsvp" onclick="toggleNav()">RSVP et Cadeau</a>
+    </div>
+
+    <section id="accueil">
+        <div class="hero-info">
+            <h1>Mariage</h1>
+            <h1> Johanne et<br>Guillaume</h1>
+            <h1>Samedi 23 mai 2026</h1>
+            
+            <div class="hero-details">
+                <p><strong>Cérémonie :</strong> Eglise Notre Dame de Larmor, Larmor-Plage</p>
+                <p><strong>Réception :</strong> Manoir de Kerangosker, Pont-Aven</p>
+                <br>
+                <h1>                                                                                                     </h1>
+            </div>
+        </div>
+        <div class="hero-image">
+            <img src="Screenshot_20251005_194840.jpg" alt="Peinture de mariage">
+        </div>
+    </section>
+
+    <section id="agenda">
+        <div class="section-header">
+            <h2 class="section-title">Déroulé du séjour</h2>
+            <p class="section-intro">Les moments clés qui rythmeront cette belle journée.</p>
+        </div>
+        <div class="timeline">
+            <div class="event">
+                <span class="time">14:30</span>
+                <h3>Cérémonie Religieuse</h3>
+                <p>Eglise de Larmor-Plage et photos sur la plage.</p>
+            </div>
+            <div class="event">
+                <span class="time">18:00</span>
+                <h3>Cocktail</h3>
+                <p>Pont Aven, Dans les jardins du Manoir.</p>
+            </div>
+            <div class="event">
+                <span class="time">20:00</span>
+                <h3>Dîner et Soirée</h3>
+                <p>Orangerie du Manoir.</p>
+            </div>
+            <div class="event">
+                <span class="time">12:00 (J+1)</span>
+                <h3>Retour de Noce</h3>
+                <p>Sur le perron du Manoir.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="faq" style="background-color: var(--white);">
+        <div class="section-header">
+            <h2 class="section-title">Questions Fréquentes</h2>
+            <p class="section-intro">Tout ce que vous devez savoir pour préparer votre venue.</p>
+        </div>
+        <div style="max-width: 800px; margin: 0 auto; width: 100%;">
+            
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">Où aura lieu la cérémonie ? <span>+</span></div>
+                <div class="faq-answer"><p style="padding: 15px 0;">La cérémonie aura lieu à l'Eglise Notre Dame de Larmor-Plage, à 14h30, puis nous nous dirigerons vers le Manoir de Kerangosker (40 min de voiture). Faites nous signe dans le formulaire en dernière page si vous n'êtes pas  véhiculés.</p></div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">Quel est le Dress Code ? <span>+</span></div>
+                <div class="faq-answer">
+                    <div style="padding: 15px 0;">
+                        <p><strong>Thème :</strong> Sobre, élégant et lumineux.</p>
+                        <p style="margin-top:10px;"><em>Mesdames :</em> Le cocktail se déroulant sur le perron en castine, prévoyez des talons adaptés ou une deuxième paire de chaussures.</p>
+                        <p><em>Messieurs :</em> Costume de rigueur (cravate ou nœud papillon appréciés). Aucun Thème particulier à respecter.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">Est-il possible de rejoindre le centre de Pont-Aven à pied du manoir ? <span>+</span></div>
+                <div class="faq-answer"><p style="padding: 15px 0;">C'est tout à fait possible (environ 15-20 min de marche), mais n'oubliez pas de prendre avec vous des baskets, le chemin est boueux !</p></div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">Les enfants sont-ils invités ? <span>+</span></div>
+                <div class="faq-answer"><p style="padding: 15px 0;">Nous adorons les enfants ! Cependant, pour permettre aux parents d'apprécier à 100% le dîner et la soirée, un service de baby-sitting sera organisé sur place jusqu'à 4 heures du matin (en cours).</p></div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">Que faire en cas de régime alimentaire spécial ? <span>+</span></div>
+                <div class="faq-answer"><p style="padding: 15px 0;">Pas de panique ! Un champ est prévu à cet effet dans le formulaire de réponse (RSVP). Merci de nous préciser toute allergie ou régime (végétarien, sans gluten, etc.).</p></div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">Y aura-t-il un parking ? <span>+</span></div>
+                <div class="faq-answer"><p style="padding: 15px 0;">Oui, un grand parking gratuit est disponible directement à l'entrée du Manoir. Les voitures peuvent y rester stationnées pour la nuit.</p></div>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="acces">
+        <div class="section-header">
+            <h2 class="section-title">Comment nous rejoindre ?</h2>
+            <p class="section-intro">VOici les pricipales options qui s'offrent à vous pour nous rejoindre.</p>
+        </div>
+        
+        <div class="access-grid">
+            <div>
+                <div class="map-container">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2666.867963283256!2d-3.766786684351582!3d47.8546529792019!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4810bda845763073%3A0xe5427189156b823e!2sManoir%20de%20Kerangosker!5e0!3m2!1sfr!2sfr!4v1620000000000!5m2!1sfr!2sfr" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+                
+                <div class="transport-option">
+                    <h4>🚄 En Train</h4>
+                    
+                    <p><strong>Pour nous rejoindre avant la cérémonie à Larmor :</strong></p>
+                    <ul style="margin-left: 20px; margin-top: 5px; margin-bottom: 20px;">
+                        <li><strong>Gare de Lorient :</strong> Env. 15 min de voiture/taxi jusqu'à l'église.</li>
+                    </ul>
+
+                    <p><strong>Pour nous rejoindre près du domaine :</strong></p>
+                    <ul style="margin-left: 20px; margin-top: 5px;">
+                         <li><strong>Gare de Quimperlé :</strong> à 17 km (environ 20 min).</li>
+                        <li><strong>Gare de Quimper :</strong> à 35 km (environ 30 min).</li>
+                        <li><strong>Gare de Lorient :</strong> à 40 km (environ 35 min).</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div>
+                <div class="transport-option">
+                    <h4>🚗 En Voiture (Depuis Paris)</h4>
+                    <p>Autoroute A11 et N165.</p>
+                    <p><strong>Distance :</strong> ~530 km</p>
+                    <p><strong>Temps estimé :</strong> 5h30 (selon trafic)</p>
+                </div>
+
+                <div class="transport-option">
+                    <h4>🔑 Location de voiture</h4>
+                    <p>Disponibles aux gares de Quimper, Quimperlé et Lorient.</p>
+                    <div class="rental-links">
+                        <a href="https://fr.getaround.com/" target="_blank" class="rental-btn">Getaround</a>
+                        <a href="https://www.avis.fr/" target="_blank" class="rental-btn">Avis</a>
+                        <a href="https://www.europcar.fr/" target="_blank" class="rental-btn">Europcar</a>
+                    </div>
+                </div>
+
+                <div class="transport-option" style="border-left: 4px solid var(--matisse-orange);">
+                    <h4>🤝 Covoiturage</h4>
+                    <p>Pour faciliter l'organisation, merci de nous laisser savoir si vous seriez intéressé par une solution de covoiturage (conducteur ou passager) dans le formulaire en dernière page.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="logement" style="background-color: var(--blue-roi); color: var(--white);">
+        <div class="section-header">
+            <h2 class="section-title" style="color: var(--white); border-color: var(--white);">Où Loger ?</h2>
+            <p class="section-intro" style="color: rgba(255,255,255,0.8);">Hôtels, gîtes ou plein air, voici nos recommandations.</p>
+        </div>
+        
+        <p style="text-align: center;">Pont-Aven est une ville touristique, nous vous conseillons de réserver (très) tôt. Surtout pour un week-end de pont.</p>
+        
+        <div class="grid-cards">
+            <div class="card" style="color: var(--text-dark);">
+                <h3>Airbnb</h3>
+                <p>Logements entiers à Pont-Aven</p>
+                <a href="https://www.airbnb.fr/s/Pont-Aven--France/homes" target="_blank" class="btn-link">Voir les dispos</a>
+            </div>
+            <div class="card" style="color: var(--text-dark);">
+                <h3>Booking</h3>
+                <p>Hôtels et gîtes</p>
+                <a href="https://www.booking.com/searchresults.fr.html?ss=Pont-Aven" target="_blank" class="btn-link">Voir les dispos</a>
+            </div>
+            <div class="card" style="color: var(--text-dark);">
+                <h3>Abritel</h3>
+                <p>Locations de vacances</p>
+                <a href="https://www.abritel.fr/search/keywords:pont-aven-finistere-france" target="_blank" class="btn-link">Voir les dispos</a>
+            </div>
+        </div>
+
+        <div class="grid-cards">
+            <div class="card" style="color: var(--text-dark);">
+                <h3>Domaine de Kerlann</h3>
+                <p>Camping 4* (Le plus proche)</p>
+                <a href="https://www.siblu.fr/camping-bretagne/domaine-de-kerlann" target="_blank" class="btn-link">Voir le site</a>
+            </div>
+            <div class="card" style="color: var(--text-dark);">
+                <h3>Le Spinnaker</h3>
+                <p>Camping 4* à Névez</p>
+                <a href="https://www.campinglegrandlarge.com/" target="_blank" class="btn-link">Voir le site</a>
+            </div>
+            <div class="card" style="color: var(--text-dark);">
+                <h3>Le Quinquis</h3>
+                <p>Camping 3* Nature</p>
+                <a href="https://www.camping-lequinquis.com/" target="_blank" class="btn-link">Voir le site</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="retour">
+        <div class="section-header">
+            <h2 class="section-title">Le Lendemain</h2>
+            <p class="section-intro">On prolonge le plaisir avant de se dire au revoir.</p>
+        </div>
+        
+        <div class="retour-grid">
+            <div class="retour-content">
+                <h3>Crêpes Party !</h3>
+                <p style="font-size: 1.2rem; margin: 20px 0;">Pour se remettre des émotions de la veille, nous vous convions à un déjeuner breton décontracté.</p>
+                
+                <p style="margin-bottom: 20px;"><strong>Chaque personne pourra manger deux crêpes salées et deux crêpes sucrées !</strong></p>
+                
+                <p><strong>Horaire :</strong> À partir de 12h00</p>
+                <p><strong>Lieu :</strong> Au Manoir</p>
+            </div>
+            
+            <div class="retour-image"></div>
+        </div>
+    </section>
+
+    <section id="guide" style="background-color: var(--blue-roi); color: var(--white);">
+        <div class="section-header">
+            <h2 class="section-title" style="color: var(--white); border-color: var(--white);">Profiter du séjour</h2>
+            <p class="section-intro" style="color: rgba(255,255,255,0.8);"> Profitez de ce week-end pour étendre votre séjour! </p>
+        </div>
+        
+        <div class="grid-cards-3col">
+            <div class="card">
+                <h3>🍽️ Restaurants</h3>
+                <ul>
+                    <li><a href="https://www.google.com/search?q=Le+Moulin+de+Rosmadec+Pont-Aven" target="_blank">Le Moulin de Rosmadec (Étoilé)</a></li>
+                    <li><a href="https://www.google.com/search?q=Les+Galettes+de+Pont-Aven" target="_blank">Les Galettes de Pont-Aven</a></li>
+                    <li><a href="https://www.google.com/search?q=Restaurant+Le+Taillefin+Pont-Aven" target="_blank">Le Taillefin (Bistronomique)</a></li>
+                    <li><a href="https://www.google.com/search?q=Crêperie+au+Pressoir+Pont+Aven" target="_blank">Crêperie au Pressoir</a></li>
+                     <li><a href="https://www.google.com/search?q=L'Amiral+Concarneau" target="_blank">L'Amiral (Concarneau)</a></li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>🏖️ Plages</h3>
+                 <ul>
+                    <li><a href="https://www.google.com/maps/search/Plage+de+Port-Manec'h" target="_blank">Plage de Port-Manec'h</a></li>
+                    <li><a href="https://www.google.com/maps/search/Plage+de+Raguénez" target="_blank">Plage de Raguénez (Tahiti Beach)</a></li>
+                     <li><a href="https://www.google.com/maps/search/Plages+Larmor-Plage" target="_blank">Plages de Larmor-Plage</a></li>
+                     <li><a href="https://www.google.com/maps/search/Plage+du+Kérou+Clohars-Carnoët" target="_blank">Plage du Kérou (Clohars-Carnoët)</a></li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>🗺️ Visites</h3>
+                <ul>
+                    <li><a href="https://www.museepontaven.fr/" target="_blank">Musée de Pont-Aven</a></li>
+                    <li><a href="https://www.google.com/search?q=Ville+Close+Concarneau" target="_blank">Concarneau et sa Ville Close</a></li>
+                    <li><a href="https://www.lorientbretagnesudtourisme.fr/" target="_blank">Lorient et la Cité de la Voile</a></li>
+                    <li><a href="https://www.google.com/search?q=Chaumières+de+Kerascoët" target="_blank">Les Chaumières de Kerascoët</a></li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>⛵ Sports Nautiques</h3>
+                <ul>
+                    <li><a href="https://www.google.com/search?q=École+de+Voile+Port+Manech" target="_blank">Voile à Port Manec'h</a></li>
+                    <li><a href="https://www.google.com/search?q=Surf+Plage+du+Kérou" target="_blank">Surf au Kérou</a></li>
+                    <li><a href="https://www.google.com/search?q=Location+Kayak+Aven" target="_blank">Kayak sur l'Aven</a></li>
+                    <li><a href="https://www.google.com/search?q=Kitesurf+Guidel" target="_blank">Kitesurf vers Guidel</a></li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>🥾 Randonnée & Marche</h3>
+                <ul>
+                    <li><a href="https://www.bretagne.com/fr/que-faire/balades-et-randos/le-gr-34-le-sentier-des-douaniers" target="_blank">GR34 (Sentier des douaniers)</a></li>
+                    <li><a href="https://www.google.com/search?q=Bois+d'Amour+Pont-Aven+rando" target="_blank">Promenade du Bois d'Amour</a></li>
+                    <li><a href="https://www.visorando.com/randonnee-pont-aven/" target="_blank">Boucles autour de Pont-Aven</a></li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>🚲 À Vélo</h3>
+                <ul>
+                    <li><a href="https://www.google.com/search?q=Location+vélo+Pont-Aven" target="_blank">Loueurs de vélos locaux</a></li>
+                    <li><a href="https://www.francevelotourisme.com/itineraire/la-littorale-a-velo/concarneau-pont-aven" target="_blank">La Littorale (Concarneau - Pont-Aven)</a></li>
+                    <li><a href="https://www.google.com/search?q=Voie+Verte+Concarneau+Roscoff" target="_blank">Voie Verte (Tronçon sud)</a></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="rsvp">
+        <div class="section-header">
+            <h2 class="section-title">Réponse et Liste</h2>
+            <p class="section-intro">Dites-nous si vous serez des nôtres.</p>
+        </div>
+        
+        <div class="rsvp-container">
+            <h3>Confirmer votre présence</h3>
+            <p style="margin-bottom: 20px;">Merci de nous répondre avant le 14 mars 2026.</p>
+            
+            <a href="#" class="btn-link" style="padding: 15px 40px; font-size: 1.2rem;">Remplir le formulaire</a>
+            <p style="font-size: 0.8rem; margin-top: 10px; color: #777;">(Le lien sera actif bientôt)</p>
+            
+            <hr style="margin: 40px 0; border: 0; border-top: 1px solid #ddd;">
+            
+            <h3>Liste de Mariage</h3>
+            <p>Votre présence est notre plus beau cadeau. Si vous souhaitez participer à notre voyage de noces :</p>
+            <a href="#" class="btn-link" style="background-color: var(--text-dark);">Lien vers la cagnotte / Liste</a>
+        </div>
+    </section>
+
+    <footer style="text-align: center; padding: 40px; background: var(--blue-roi); color: var(--white); position: relative; z-index: 20;">
+        <p>© 2026 - Mariage à Pont-Aven</p>
+        <p style="font-size: 0.8rem; opacity: 0.7;">Fait avec amour</p>
+    </footer>
+
+    <script>
+        // Gestion du Menu
+        function toggleNav() {
+            const nav = document.getElementById("myNav");
+            if (nav.style.width === "100%") {
+                nav.style.width = "0";
+                nav.classList.remove("open");
+            } else {
+                nav.style.width = "100%";
+                nav.classList.add("open");
+            }
+        }
+
+        // Gestion de l'accordéon FAQ
+        function toggleFaq(element) {
+            const answer = element.nextElementSibling;
+            if (answer.style.maxHeight) {
+                answer.style.maxHeight = null;
+                element.querySelector('span').textContent = "+";
+            } else {
+                answer.style.maxHeight = answer.scrollHeight + "px";
+                element.querySelector('span').textContent = "-";
+            }
+        }
+    </script>
+</body>
+</html>
